@@ -596,6 +596,9 @@ label[for='toggle-all'] {
 .aside-menu{
   background: black;
 }
+.aside-back-drop.in {
+  opacity: 0.6;
+}
 /*Responsive Design*/
 @media all and (max-width: 240px) {
   .toastr-container .toast.div {
