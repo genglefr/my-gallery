@@ -1,0 +1,18 @@
+<section class="todoapp">
+    <header class="header">
+        <h1>todos</h1>
+        <input class="new-todo" ng-keypress="newTodoKeyPressHandler($event)" placeholder="What needs to be done?">
+    </header>
+    <section class="main">
+        <ul class="todo-list">
+            <li ng-repeat="todo in todos | orderObjectBy:'_id':true track by todo._id" id="li_{{todo._id}}" class="{{todo.completed ? 'complete' : ''}}">
+                <div class="view">
+                    <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="checkboxChanged(todo, $event)" />
+                    <label ng-swipe-right="deleteButtonPressed(todo)" ng-swipe-left="todoDblClicked(todo)" ng-dblclick="todoDblClicked(todo)">{{todo.title}}</label>
+                    <button class="destroy" ng-click="deleteButtonPressed(todo)"></button>
+                </div>
+                <input id="input_{{todo._id}}" class="edit" ng-keypress="todoKeyPressed(todo, $event)" ng-blur="todoBlurred(todo, $event)" />
+            </li>
+        </ul>
+    </section>
+</section>

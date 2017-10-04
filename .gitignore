@@ -1,0 +1,15 @@
+logs/*
+!.gitkeep
+node_modules/*
+app/bower_components/*
+_replicator/*
+_users/
+pouchdb__all_dbs_/*
+release-builds/*
+todos/*
+todos_restricted/*
+tmp
+Update.exe
+log.txt
+.DS_Store
+.idea

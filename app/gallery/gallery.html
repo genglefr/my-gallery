@@ -1,0 +1,44 @@
+<div style="padding-top: 150px;
+    padding-left: 50px;
+    padding-right: 50px;overflow-y: auto">
+    <div ng-show="images.length == 0"><h2>Gallery empty</h2></div>
+    <ng-image-gallery images="images" thumbnails="true" thumb-size="150" inline="false" bubbles="true"
+                      bubble-size="60" img-bubbles="true" bg-close="false" piracy="false" on-open="opened();" on-close="closed();"
+                      on-delete="delete(img, cb);" bg-close="false"></ng-image-gallery>
+</div>
+<div class="upload-container">
+    <div class="upload-border"></div>
+    <div class="upload-drop-and-queue">
+        <div ng-show="uploader.isHTML5">
+            <!-- 3. nv-file-over uploader="link" over-class="className" -->
+            <div class="well my-drop-zone" nv-file-over nv-file-drop uploader="uploader">Drop zone</div>
+        </div>
+        <div class="col-md-9" style="margin-bottom: 40px" ng-show="uploader.queue.length > 0">
+            <h3>Upload queue</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width: 100%;">Name</th>
+                    <th style="width: 160px;text-align: right; white-space: nowrap">Size / Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in uploader.queue">
+                    <td style="width: 1px;"><strong>{{ item.file.name }}</strong></td>
+                    <td style="width: 160px;text-align: right" nowrap>{{ item.file.size/1024/1024|number:2 }} MB
+                        <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                            <span class="glyphicon glyphicon-upload"></span>
+                        </button>
+                        <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                            <span class="glyphicon glyphicon-ban-circle"></span>
+                        </button>
+                        <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

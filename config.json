@@ -1,0 +1,11 @@
+{
+  "couchdb": {
+    "uuid": "2d42f25b-3322-467b-a5ac-cd96aec60f0b"
+  },
+  "cors": {
+    "headers": "accept, authorization, content-type, origin, referer, x-csrf-token"
+  },
+  "admins": {
+    "root": "-pbkdf2-0ce851c2e1dbaf3ebda4578f50f1f42b88762c18,1741571f81961b01861ec17f19b1811cc1491d314a1ca173,10"
+  }
+}

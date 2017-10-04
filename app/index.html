@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=580, initial-scale=1">
+  <title>My Gallery</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="bower_components/angular-aside-menu/dist/aside-menu.css">
+  <link rel="stylesheet" href="bower_components/angular-toastr/dist/angular-toastr.css">
+  <link rel="stylesheet" href="bower_components/ng-image-gallery/dist/ng-image-gallery.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <aside-menu id="left-menu" side="left" width="300px" is-backdrop="true" push-content="true">
+    <ul class="list-group">
+      <!--<li class="list-group-item" aside-menu-toggle="left-menu"></li>-->
+      <li class="list-group-item" ng-click="navigate('view1')" aside-menu-toggle="left-menu">Public todo list</li>
+      <li class="list-group-item" ng-click="navigate('view2')" aside-menu-toggle="left-menu">Restricted todo list</li>
+      <li class="list-group-item" ng-click="navigate('gallery')" aside-menu-toggle="left-menu">Gallery</li>
+      <li class="list-group-item" ng-click="navigate('view3')" aside-menu-toggle="left-menu">Login</li>
+    </ul>
+  </aside-menu>
+  <aside-menu-content>
+    <div id="nav-icon" aside-menu-toggle="left-menu" ng-class="{'open': menuOpened}">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="toastr-container toast-top-right" style="pointer-events: auto;">
+      <div class="ng-scope" style="">
+        <div class="toast toast-success" ng-show="online">
+          <div class="toast-message" aria-label="You are online">You are online</div>
+        </div>
+        <div class="toast toast-error" ng-hide="online">
+          <div class="toast-message" aria-label="You are offline">You are offline</div>
+        </div>
+      </div>
+      </div>
+    </div>
+    <div class="toastr-container toast-top-right" style="pointer-events: auto;margin-top: 45px">
+      <div class="ng-scope" style="">
+        <div class="toast toast-error" ng-show="context" ng-click="logout();">
+          <div class="toast-message" aria-label="Logout">Logout</div>
+        </div>
+        <div class="toast toast-info" ng-hide="context" ng-click="navigate('view3');">
+          <div class="toast-message" aria-label="Login">Click to login</div>
+        </div>
+      </div>
+    </div>
+    <div ng-view></div>
+  </aside-menu-content>
+
+  <!--<div>Angular seed app: v<span app-version></span></div>-->
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-pouchdb/angular-pouchdb.js"></script>
+  <script src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
+  <script src="bower_components/angular-aside-menu/dist/aside-menu.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-file-upload/dist/angular-file-upload.js"></script>
+  <script src="bower_components/pouchdb/dist/pouchdb.js"></script>
+  <script src="bower_components/pouchdb-authentication/dist/pouchdb.authentication.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/hammerjs/hammer.js"></script>
+  <script src="bower_components/ng-image-gallery/dist/ng-image-gallery.js"></script>
+  <script src="app.js"></script>
+  <script src="view1/view1.js"></script>
+  <script src="view2/view2.js"></script>
+  <script src="view3/view3.js"></script>
+  <script src="gallery/gallery.js"></script>
+</body>
+</html>
