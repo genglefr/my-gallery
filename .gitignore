@@ -4,6 +4,7 @@ node_modules/*
 app/bower_components/*
 _replicator/*
 _users/
+images/**.*
 pouchdb__all_dbs_/*
 release-builds/*
 todos/*
