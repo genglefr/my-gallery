@@ -2,7 +2,7 @@
 
 This project is a proof of concept for synching pouchdb - couchdb databases, using images as base64 documents.
 
-#Dependencies
+# Dependencies
 PouchDB server (https://github.com/pouchdb/pouchdb-server):
 
 `npm install -g pouchdb-server`
@@ -11,5 +11,5 @@ Electron packager (https://github.com/electron-userland/electron-packager)
 
 `npm install -g electron-packager`
 
-#Configuration
+# Configuration
 Once PouchDB server is running, connect using root (`root/root`) account, and create `images` database.
