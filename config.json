@@ -6,6 +6,7 @@
     "headers": "accept, authorization, content-type, origin, referer, x-csrf-token"
   },
   "admins": {
-    "root": "-pbkdf2-0ce851c2e1dbaf3ebda4578f50f1f42b88762c18,1741571f81961b01861ec17f19b1811cc1491d314a1ca173,10"
+    "root": "-pbkdf2-0ce851c2e1dbaf3ebda4578f50f1f42b88762c18,1741571f81961b01861ec17f19b1811cc1491d314a1ca173,10",
+    "genglefr": "-pbkdf2-be8084b3269f9f851be5fc22f3b373d8a85f600c,1e51731e71a013f1251a11dd10c11d1501481af1e61c214e,10"
   }
 }
