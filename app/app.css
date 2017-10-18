@@ -663,7 +663,7 @@ label[for='toggle-all'] {
 .delete-img{
   top:30px;
 }
-.my-drop-zone { border: dotted 3px lightgray; }
+.my-drop-zone { border: dotted 3px lightgray; margin-bottom: unset; }
 .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
 .another-file-over-class { border: dotted 3px green; }
 
