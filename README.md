@@ -12,4 +12,16 @@ Electron packager (https://github.com/electron-userland/electron-packager)
 `npm install -g electron-packager`
 
 # Configuration
-Once PouchDB server is running, connect using root (`root/root`) account, and create `images` database.
+Once PouchDB server is running (`npm run couchdb`), connect using root (`root/root`) account, and create `images` database.
+
+# Packaging
+Supports Electron (windows & OS X) packaging, using the following command lines:
+
+`npm run package-win`<br>
+`npm run package-osx`
+
+# Installers
+Support of windows and OS X installers is on-going, but yet bug free. Command lines are:
+
+`npm run install-win`<br>
+`npm run install-osx`
