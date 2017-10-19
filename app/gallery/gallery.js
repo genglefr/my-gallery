@@ -8,39 +8,48 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
   });
 }]).controller('GalleryCtrl', ['$rootScope', '$scope', '$filter', 'toastr', 'pouchDB', 'FileUploader', function($rootScope, $scope, $filter, toastr, pouchDB, FileUploader) {
     var db = pouchDB('images');
-    //var remoteCouch = location.protocol+'//'+location.hostname+':5984/images';
-    var remoteCouch = 'http://localhost:5984/images';
+    var remoteCouch = 'http://127.0.0.1:5984/images';
     var opts = {live: true, retry: true, back_off_function: back_off};
+
+    db.replicate.to(remoteCouch, opts, syncError);
+    db.replicate.from(remoteCouch, opts, syncError);
+
     db.changes({
         since: 'now',
         live: true,
         include_docs: true,
         heartbeat:1000
     }).on('change', function(change){
-        if(change.deleted){
-            //toastr.success('Successfully deleted image.');
+        if(!change.deleted){
+            createDeletableFlag(change);
+            $scope.imageMap[change.doc._id] = change.doc;
         } else {
-            //toastr.success('Successfully created image.');
+            delete $scope.imageMap[change.doc._id];
         }
-        sync();
+        $scope.images = Object.values($scope.imageMap);
     }).on('denied', function (err) {
         toastr.error('Not authorised to sync:' + err);
     }).on('error', function (err) {
         toastr.error('Error when syncing:' + err);
     });
-    db.replicate.to(remoteCouch, opts, syncError);
-    db.replicate.from(remoteCouch, opts, syncError);
-    function sync() {
+
+    function readAllOnce() {
         db.allDocs({include_docs: true, descending: true}, function(err, doc) {
-            $scope.images = new Array();
+            $scope.imageMap = {};
             doc.rows.forEach(function(row){
-                row.doc.deletable = (row.doc.author == '' ? true :
-                    ($rootScope.context ? row.doc.author == $rootScope.context.userCtx.name : false));
-                $scope.images.push(row.doc);
+                createDeletableFlag(row);
+                $scope.imageMap[row.doc._id] = row.doc;
             });
+            $scope.images = Object.values($scope.imageMap);
         });
     }
-    sync();
+
+    function createDeletableFlag(row){
+        row.doc.deletable = (row.doc.author == '' ? true :
+            ($rootScope.context ? row.doc.author == $rootScope.context.userCtx.name : false));
+    }
+
+    readAllOnce();
 
     function syncError() {
         toastr.error('Failure when syncing');
@@ -59,7 +68,16 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         });
     }
 
-    function put(image, fileItem){
+    function put(base64Image, fileItem){
+        var id = new Date().toISOString();
+        var image = {
+            _id: id,
+            id: id,
+            url : base64Image,
+            title: fileItem.file.name,
+            desc: "Uploaded by " + ($rootScope.context ? $rootScope.context.userCtx.name : 'anonymous'),
+            author: $rootScope.context ? $rootScope.context.userCtx.name : ''
+        };
         db.put(image, function callback(err, result) {
             if (err) {
                 console.log('test');
@@ -81,16 +99,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             i.onload = function() {
                 var scale = Math.min((750 / i.width), (750 / i.height));
                 var base64Image = imageToDataUri(i, i.width * scale, i.height * scale);
-                var id = new Date().toISOString();
-                var image = {
-                    _id: id,
-                    id: id,
-                    url : base64Image,
-                    title: fileItem.file.name,
-                    desc: "Uploaded by " + ($rootScope.context ? $rootScope.context.userCtx.name : 'anonymous'),
-                    author: $rootScope.context ? $rootScope.context.userCtx.name : ''
-                };
-                put(image, fileItem);
+                put(base64Image, fileItem);
             }
         }
         reader.readAsDataURL(file);

@@ -11,7 +11,7 @@ angular.module('myApp.view1', ['ngRoute','toastr','pouchdb'])
     var db = pouchDB('todos');
     //var remoteCouch = location.protocol+'//'+location.hostname+':5984/todos';
     //var remoteCouch = 'http://ad92e789.ngrok.io/todos';
-    var remoteCouch = 'http://localhost:5984/todos';
+    var remoteCouch = 'http://127.0.0.1:5984/todos';
     var opts = {live: true, retry: true, back_off_function: back_off};
     db.changes({
         since: 'now',

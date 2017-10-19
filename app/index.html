@@ -19,11 +19,12 @@
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
-  <aside-menu id="left-menu" side="left" width="150px" is-backdrop="true" push-content="true">
+  <aside-menu id="left-menu" side="left" width="250px" is-backdrop="true" push-content="false">
+    <span class="app-header">My Gallery</span>
     <ul class="list-group">
       <!--<li class="list-group-item" aside-menu-toggle="left-menu"></li>-->
-      <li class="list-group-item" ng-click="navigate('gallery')" aside-menu-toggle="left-menu">Gallery</li>
-      <li class="list-group-item" ng-click="navigate('view3')" aside-menu-toggle="left-menu">Login</li>
+      <li class="list-group-item" ng-click="navigate('gallery')" aside-menu-toggle="left-menu"><span>Gallery</span></li>
+      <li class="list-group-item" ng-click="navigate('view3')" aside-menu-toggle="left-menu"><span>Login</span></li>
     </ul>
   </aside-menu>
   <aside-menu-content>

@@ -9,7 +9,7 @@ angular.module('myApp.view2', ['ngRoute','toastr','pouchdb'])
 }]).controller('View2Ctrl', ['$rootScope', '$scope', 'toastr', 'pouchDB', function($rootScope, $scope, toastr, pouchDB) {
     var ENTER_KEY = 13;
     var db = pouchDB('todos-restricted-' + ($rootScope.context ? $rootScope.context.userCtx.name : 'anonymous'));
-    var remoteCouch = 'http://localhost:5984/todos_restricted';
+    var remoteCouch = 'http://127.0.0.1:5984/todos_restricted';
     //var remoteCouch = 'http://d002ce9e.ngrok.io/todos';
     var opts = {live: true, retry: true, back_off_function: back_off};
     db.changes({
