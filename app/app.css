@@ -693,5 +693,5 @@ td:first-child {
   padding-bottom: 50px;
 }
 .ng-image-gallery-thumbnails .thumb {
-box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: 10px 12px 10px 0px rgba(0, 0, 0, 0.15);
 }
