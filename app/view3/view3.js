@@ -11,6 +11,7 @@ angular.module('myApp.view3', ['ngRoute','toastr','pouchdb'])
     $scope.user = {};
     $scope.user.id = "";
     $scope.user.password = "";
+    angular.element('.login').trigger('focus');
     //var db = new PouchDB(location.protocol+'//'+location.hostname+':5984/todos-moderated', {skip_setup: true});
     var db = new PouchDB('http://localhost:5984/todos-moderated', {skip_setup: true});
     $scope.login = function (){

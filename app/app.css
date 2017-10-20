@@ -23,7 +23,6 @@ button {
 body {
   font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
-  background: #eaeaea url('bg.png');
   color: #4d4d4d;
   width: 550px;
   margin: 0 auto;
@@ -689,4 +688,10 @@ td:first-child {
   text-overflow: ellipsis;
   overflow:hidden;
   /* to keep IE happy */
+}
+.ng-image-gallery{
+  padding-bottom: 50px;
+}
+.ng-image-gallery-thumbnails .thumb {
+box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.15);
 }
