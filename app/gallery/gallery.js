@@ -111,6 +111,6 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         canvas.width = width;
         canvas.height = height;
         ctx.drawImage(img, 0, 0, width, height);
-        return canvas.toDataURL('image/jpeg', 1.0);
+        return canvas.toDataURL('image/png', 1.0);
     }
 }]);
