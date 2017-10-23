@@ -76,12 +76,12 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             url : base64Image,
             title: fileItem.file.name,
             desc: "Uploaded by " + ($rootScope.context ? $rootScope.context.userCtx.name : 'anonymous'),
+            likes : 0,
             author: $rootScope.context ? $rootScope.context.userCtx.name : ''
         };
         db.put(image, function callback(err, result) {
             if (err) {
-                console.log('test');
-                toastr.error('Failure when posting todo' + err);
+                toastr.error('Failure when creating image:' + err);
             } else {
                 fileItem.remove();
             }
@@ -112,5 +112,18 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         canvas.height = height;
         ctx.drawImage(img, 0, 0, width, height);
         return canvas.toDataURL('image/png', 1.0);
+    }
+
+    $scope.methods = {};
+    $scope.methods.doubletap = function(id){
+        if (id && $scope.imageMap) {
+            var image = $scope.imageMap[id];
+            image.likes = image.likes+1;
+            db.put(image, function callback(err, result) {
+                if (err) {
+                    toastr.error('Failure when liking image:' + err);
+                }
+            });
+        }
     }
 }]);

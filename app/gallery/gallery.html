@@ -2,7 +2,7 @@
     padding-left: 50px;
     padding-right: 50px;overflow-y: auto">
     <div ng-show="images.length == 0"><h2>Gallery empty</h2></div>
-    <ng-image-gallery images="images" thumbnails="true" thumb-size="150" inline="false" bubbles="true"
+    <ng-image-gallery images="images" methods="methods" thumbnails="true" thumb-size="150" inline="false" bubbles="true"
                       bubble-size="60" img-bubbles="true" bg-close="false" piracy="false" on-open="opened();" on-close="closed();"
                       on-delete="delete(img, cb);" bg-close="false"></ng-image-gallery>
 </div>

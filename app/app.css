@@ -695,3 +695,22 @@ td:first-child {
 .ng-image-gallery-thumbnails .thumb {
   box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.15);
 }
+.heart {
+  color:white;
+  text-align: center;
+}
+.heart:after {
+  content: "\2665";
+  color: red;
+  padding-left: 5px;
+  font-size: x-large;top: 3px;
+  position: relative;
+}
+.galleria-image{
+  position: relative !important;
+  margin-bottom: 10px !important;
+  padding-top: 100px;
+}
+.galleria-images{
+  display: grid;
+}
