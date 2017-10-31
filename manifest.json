@@ -8,5 +8,5 @@
       "scripts": ["background.js"]
     }
   },
-  "icons": { "16": "build/spikeseed.png", "128": "build/spikeseed.png" }
+  "icons": { "16": "build/spikeseedgoogle.png", "128": "build/spikeseedgoogle.png" }
 }
