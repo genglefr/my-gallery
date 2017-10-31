@@ -1,0 +1,12 @@
+{
+  "name": "My Gallery",
+  "description": "Image gallery, in sync thx to pouchdb/couchdb",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "icons": { "16": "build/spikeseed.png", "128": "build/spikeseed.png" }
+}

@@ -68,6 +68,10 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         });
     }
 
+    $scope.uploadItem = function() {
+        angular.element("#file-select").click();
+    }
+
     function put(base64Image, fileItem){
         var id = new Date().toISOString();
         var image = {

@@ -31,7 +31,7 @@
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "npm run update-webdriver",
     "protractor": "protractor e2e-tests/protractor.conf.js",
-    "couchdb": "pouchdb-server --host 0.0.0.0",
+    "couchdb": "pouchdb-server --host 0.0.0.0 --dir ../pouchdb-server",
     "update-index-async": "node -e \"var fs=require('fs'),indexFile='app/index-async.html',loaderFile='app/bower_components/angular-loader/angular-loader.min.js',loaderText=fs.readFileSync(loaderFile,'utf-8').split(/sourceMappingURL=angular-loader.min.js.map/).join('sourceMappingURL=bower_components/angular-loader/angular-loader.min.js.map'),indexText=fs.readFileSync(indexFile,'utf-8').split(/\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/).join('//@@NG_LOADER_START@@\\n'+loaderText+'    //@@NG_LOADER_END@@');fs.writeFileSync(indexFile,indexText);\"",
     "electron-dist":"C:/Users/genglefr/IdeaProjects/devoxx2017/node_modules/electron-prebuilt-compile/node_modules/electron/dist/electron.exe C:/Users/genglefr/IdeaProjects/devoxx2017",
     "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./build/spikeseed_vXb_icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"MyGallery\" --ignore=.idea/* --ignore=_replicator/* --ignore=_user/* --ignore=node_modules/* --ignore=images/* --ignore=pouch__all_dbs_/* --ignore=todos/* --ignore=todos_restricted/* --ignore=build/*",

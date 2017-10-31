@@ -11,7 +11,7 @@
     <div class="upload-drop-and-queue">
         <div ng-show="uploader.isHTML5">
             <!-- 3. nv-file-over uploader="link" over-class="className" -->
-            <div onclick="$('#file-select').click();" class="well my-drop-zone" nv-file-over nv-file-drop uploader="uploader">Drop zone</div>
+            <div ng-click="uploadItem()" class="well my-drop-zone" nv-file-over nv-file-drop uploader="uploader">Drop zone</div>
             <input id="file-select" style="display:none" type="file" nv-file-select="" uploader="uploader" multiple  />
         </div>
         <div class="col-md-9" style="margin-bottom: 40px" ng-show="uploader.queue.length > 0">
