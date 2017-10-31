@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module('myApp.view3', ['ngRoute','toastr','pouchdb'])
+angular.module('myApp.login', ['ngRoute','toastr','pouchdb'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/view3', {
-    templateUrl: 'view3/view3.html',
-    controller: 'View3Ctrl'
+  $routeProvider.when('/login', {
+    templateUrl: 'login/login.html',
+    controller: 'LoginCtrl'
   });
-}]).controller('View3Ctrl', ['$scope','toastr', 'pouchDB', function($scope, toastr, pouchDB) {
+}]).controller('LoginCtrl', ['$scope','toastr', 'pouchDB', function($scope, toastr, pouchDB) {
     $scope.user = {};
     $scope.user.id = "";
     $scope.user.password = "";

@@ -24,7 +24,7 @@
     <ul class="list-group">
       <!--<li class="list-group-item" aside-menu-toggle="left-menu"></li>-->
       <li class="list-group-item" ng-click="navigate('gallery')" aside-menu-toggle="left-menu"><span>Gallery</span></li>
-      <li class="list-group-item" ng-click="navigate('view3')" aside-menu-toggle="left-menu"><span>Login</span></li>
+      <li class="list-group-item" ng-click="navigate('login')" aside-menu-toggle="left-menu"><span>Login</span></li>
     </ul>
   </aside-menu>
   <aside-menu-content>
@@ -49,7 +49,7 @@
         <div class="toast toast-error" ng-show="context" ng-click="logout();">
           <div class="toast-message" aria-label="Logout">Logout</div>
         </div>
-        <div class="toast toast-info" ng-hide="context" ng-click="navigate('view3');">
+        <div class="toast toast-info" ng-hide="context" ng-click="navigate('login');">
           <div class="toast-message" aria-label="Login">Click to login</div>
         </div>
       </div>
@@ -80,9 +80,7 @@
   <script src="bower_components/hammerjs/hammer.js"></script>
   <script src="bower_components/ng-image-gallery/dist/ng-image-gallery.js"></script>
   <script src="app.js"></script>
-  <script src="view1/view1.js"></script>
-  <script src="view2/view2.js"></script>
-  <script src="view3/view3.js"></script>
+  <script src="login/login.js"></script>
   <script src="gallery/gallery.js"></script>
 </body>
 </html>

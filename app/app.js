@@ -3,7 +3,7 @@
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
   'ngRoute',
-  'myApp.view1', 'myApp.view2', 'myApp.view3', 'myApp.gallery', 'toastr', 'ngSanitize', 'ngAnimate', 'pouchdb', 'asideModule', 'ngTouch'
+  'myApp.login', 'myApp.gallery', 'toastr', 'ngSanitize', 'ngAnimate', 'pouchdb', 'asideModule', 'ngTouch'
 ]).config(['$locationProvider', '$routeProvider', 'toastrConfig', function($locationProvider, $routeProvider, toastrConfig) {
   $locationProvider.hashPrefix('!');
   $routeProvider.otherwise({redirectTo: '/gallery'});
@@ -81,7 +81,7 @@ angular.module('myApp', [
         const template = [
             {label: 'Edit', submenu: [ {role: 'undo'},{role: 'redo'},{type: 'separator'},{role: 'cut'}, {role: 'copy'},{role: 'paste'},{role: 'selectall'}]},
             {label: 'View', submenu: [ {role: 'reload'},{role: 'forcereload'},{role: 'toggledevtools'},{type: 'separator'},{role: 'resetzoom'},{role: 'zoomin'},{role: 'zoomout'},{type: 'separator'},{role: 'togglefullscreen'}]},
-            {role: 'window', submenu: [ {role: 'minimize'},{role: 'close'},{type: 'separator'},{label: 'Gallery', click() { $location.path('gallery'); $route.reload(); }},{label: 'Log in', click () {$location.path('view3'); $route.reload();}}]},
+            {role: 'window', submenu: [ {role: 'minimize'},{role: 'close'},{type: 'separator'},{label: 'Gallery', click() { $location.path('gallery'); $route.reload(); }},{label: 'Log in', click () {$location.path('login'); $route.reload();}}]},
             {role: 'help', submenu: [ {label: 'Contact',click() { remote.shell.openExternal('mailto:francois.gengler@spikeseed.com') }}]}
         ]
         const menu = Menu.buildFromTemplate(template)
