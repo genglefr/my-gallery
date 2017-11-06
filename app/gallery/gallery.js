@@ -23,6 +23,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         if(!change.deleted){
             createDeletableFlag(change);
             $scope.imageMap[change.doc._id] = change.doc;
+            notify(change);
         } else {
             delete $scope.imageMap[change.doc._id];
         }
@@ -47,6 +48,12 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
     function createDeletableFlag(row){
         row.doc.deletable = (row.doc.author == '' ? true :
             ($rootScope.context ? row.doc.author == $rootScope.context.userCtx.name : false));
+    }
+
+    function notify(change) {
+        if($rootScope.context && change.doc.likeAuthor && change.doc.author == $rootScope.context.userCtx.name && $rootScope.context.userCtx.name != change.doc.likeAuthor){
+            toastr.info(change.doc.likeAuthor + ' likes your image "' + change.doc.title + '" ! It has now ' + change.doc.likes + ' like(s).');
+        }
     }
 
     readAllOnce();
@@ -123,6 +130,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         if (id && $scope.imageMap) {
             var image = $scope.imageMap[id];
             image.likes = image.likes+1;
+            image.likeAuthor = ($rootScope.context ? $rootScope.context.userCtx.name : 'anonymous');
             db.put(image, function callback(err, result) {
                 if (err) {
                     toastr.error('Failure when liking image:' + err);
