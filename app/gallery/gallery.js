@@ -54,7 +54,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         if($rootScope.context && change.doc.likeAuthor && change.doc.author == $rootScope.context.userCtx.name && $rootScope.context.userCtx.name != change.doc.likeAuthor){
             var text = change.doc.likeAuthor + ' likes your image "' + change.doc.title + '" ! It has now ' + change.doc.likes + ' like(s).';
             toastr.info(text);
-            /*webNotification.showNotification('One moreeee like !', {
+            /*webNotification.showNotification('One more like !', {
                 body: text,
                 autoClose: 4000 //auto close the notification after 4 seconds (you can manually close it via hide function)
             });*/
