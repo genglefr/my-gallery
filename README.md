@@ -27,7 +27,7 @@ Supports Electron (windows & OS X) packaging, using the following command lines:
 `npm run package-osx`
 
 # Installers
-Support of windows and OS X installers is on-going, but yet bug free. Command lines are:
+Support of windows and OS X installers is on-going, but not yet bug free. Command lines are:
 
 `npm run install-win`<br>
 `npm run install-osx`
