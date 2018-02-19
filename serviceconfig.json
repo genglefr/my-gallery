@@ -1,0 +1,70 @@
+{
+  "log": ["*"],
+  "adminInterface": "0.0.0.0:4985",
+  "interface": "0.0.0.0:4984",
+  "databases": {
+    "images": {
+      "server": "http://localhost:8091",
+      "pool": "default",
+      "bucket": "images",
+      "password": "***",
+      "name": "images",
+      "sync": "function(doc) { channel(doc.channels); }",
+      "users": {
+        "GUEST": {
+          "disabled": false,
+          "admin_channels": [
+            "*"
+          ]
+        }
+      },
+      "revs_limit": 20,
+      "event_handlers": {
+        "max_processes": 500,
+        "wait_for_process": "10"
+      },
+      "allow_empty_password": true
+    }
+  },
+  "logging": {
+    "default": {
+      "logFilePath": "C:/Program Files (x86)/Couchbase/var/lib/couchbase/logs/sync_gateway.log",
+      "logKeys": [
+        "HTTP",
+        "REST",
+        "Events",
+        "CRUD",
+        "Auth",
+        "Access"
+      ],
+      "logLevel": "info",
+      "rotation": {
+        "maxsize": 5242880,
+        "maxage": 2,
+        "maxbackups": 5,
+        "localtime": false
+      }
+    }
+  },
+  "pretty": false,
+  "CORS": {
+    "Origin": [
+      "http://localhost:8000",
+      "http://127.0.0.1:8000",
+      "http://localhost:8000/",
+      "http://127.0.0.1:8000/"
+    ],
+    "LoginOrigin": [
+      "http://localhost:8000",
+      "http://127.0.0.1:8000",
+      "http://localhost:8000/",
+      "http://127.0.0.1:8000/"
+    ],
+    "Headers": [
+      "If-Modified-Since",
+      "Cache-Control",
+      "Content-Type"
+    ],
+    "MaxAge": 1728000
+  }
+}
