@@ -9,7 +9,6 @@ Couchbase server (https://www.couchbase.com/products/server)
 Sync gateway (https://www.couchbase.com/products/sync-gateway)
 
 Electron packager (https://github.com/electron-userland/electron-packager)
-
 `npm install -g electron-packager`
 
 # Configuration
