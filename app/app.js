@@ -41,7 +41,7 @@ angular.module('myApp', [
         });
     }, false);
     //var db = new PouchDB(location.protocol+'//'+location.hostname+':5984/todos-moderated', {skip_setup: true});
-    var db = new PouchDB('http://localhost:5984/images', {skip_setup: true});
+    var db = new PouchDB('http://localhost:4984/images', {skip_setup: true});
     db.getSession(function (err, response) {
         if (err) {
             toastr.error('Failure getting session:' + JSON.stringify(err));

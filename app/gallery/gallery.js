@@ -7,43 +7,32 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
     controller: 'GalleryCtrl'
   });
 }]).controller('GalleryCtrl', ['$rootScope', '$scope', '$filter', 'toastr', 'pouchDB', 'FileUploader', function($rootScope, $scope, $filter, toastr, pouchDB, FileUploader) {
-    var db = pouchDB('images');
-    var remoteCouch = 'http://127.0.0.1:5984/images';
-    var opts = {live: true, retry: true, back_off_function: back_off};
 
-    db.replicate.to(remoteCouch, opts, syncError);
-    db.replicate.from(remoteCouch, opts, syncError);
+    var localDb = new PouchDB('images', {adapter : 'idb', auto_compaction: true});
+    var remoteUrl = 'http://localhost:4984/images';
+    var remoteDb = new PouchDB(remoteUrl);
+    var opts = {live: true, back_off_function: back_off};
 
-    db.changes({
-        since: 'now',
-        live: true,
-        include_docs: true,
-        heartbeat:1000
-    }).on('change', function(change){
-        if(!change.deleted){
+    initWebsocket(localDb, remoteDb);
+    localDb.replicate.to(remoteUrl, opts, syncError);
+
+    var imageMap = {};
+    localDb.changes({since: 0, live: true, include_docs: true, retry: true, style: 'all_docs'}).on('change', function (change) {
+        if (!change.deleted) {
             createDeletableFlag(change);
-            $scope.imageMap[change.doc._id] = change.doc;
+            imageMap[change.doc._id] = change.doc;
             notify(change);
-        } else {
-            delete $scope.imageMap[change.doc._id];
+        } else if (imageMap[change.doc._id]) {
+            delete imageMap[change.doc._id];
         }
-        $scope.images = Object.values($scope.imageMap);
+        var img = Object.values(imageMap);
+        $scope.images = img;
+        $scope.$apply(img);
     }).on('denied', function (err) {
         toastr.error('Not authorised to sync:' + err);
     }).on('error', function (err) {
         toastr.error('Error when syncing:' + err);
     });
-
-    function readAllOnce() {
-        db.allDocs({include_docs: true, descending: true}, function(err, doc) {
-            $scope.imageMap = {};
-            doc.rows.forEach(function(row){
-                createDeletableFlag(row);
-                $scope.imageMap[row.doc._id] = row.doc;
-            });
-            $scope.images = Object.values($scope.imageMap);
-        });
-    }
 
     function createDeletableFlag(row){
         row.doc.deletable = (row.doc.author == '' ? true :
@@ -54,17 +43,12 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         if($rootScope.context && change.doc.likeAuthor && change.doc.author == $rootScope.context.userCtx.name && $rootScope.context.userCtx.name != change.doc.likeAuthor){
             var text = change.doc.likeAuthor + ' likes your image "' + change.doc.title + '" ! It has now ' + change.doc.likes + ' like(s).';
             toastr.info(text);
-            /*webNotification.showNotification('One more like !', {
-                body: text,
-                autoClose: 4000 //auto close the notification after 4 seconds (you can manually close it via hide function)
-            });*/
         }
     }
 
-    readAllOnce();
-
-    function syncError() {
-        toastr.error('Failure when syncing');
+    function syncError(e) {
+        console.log(e);
+        toastr.error('Failure when syncing:'+e);
     }
 
     function back_off(delay) {
@@ -75,7 +59,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
     }
 
     $scope.delete = function(img, cb) {
-        db.remove(img, function callback(err, result) {
+        localDb.remove(img, function callback(err, result) {
             cb();
         });
     }
@@ -95,12 +79,11 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             likes : 0,
             author: $rootScope.context ? $rootScope.context.userCtx.name : ''
         };
-        db.put(image, function callback(err, result) {
+        localDb.put(image, function callback(err, result) {
             if (err) {
                 toastr.error('Failure when creating image:' + err);
-            } else {
-                fileItem.remove();
             }
+            fileItem.remove();
         });
     }
 
@@ -121,7 +104,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         reader.readAsDataURL(file);
     };
 
-    function imageToDataUri (img, width, height) {
+    function imageToDataUri(img, width, height) {
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
         canvas.width = width;
@@ -136,11 +119,46 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             var image = $scope.imageMap[id];
             image.likes = image.likes+1;
             image.likeAuthor = ($rootScope.context ? $rootScope.context.userCtx.name : 'anonymous');
-            db.put(image, function callback(err, result) {
+            localDb.put(image, function callback(err, result) {
                 if (err) {
                     toastr.error('Failure when liking image:' + err);
                 }
             });
         }
     }
+
+    function initWebsocket(localDb, remoteDb, forceCreate) {
+        if(!window.s || forceCreate)
+            window.s = new WebSocket("ws://localhost:4984/images/_changes?feed=websocket");
+        s.onmessage = function (event) {
+            if (event.data) {
+                var changes = JSON.parse(event.data);
+                changes.forEach(function (change) {
+                    remoteDb.get(change.id,{rev: change.changes[0].rev}).then(function (doc) {
+                        localDb.bulkDocs([doc], {new_edits: false});
+                    });
+                });
+            }
+        }
+        s.onopen = function (event) {
+            localDb.info().then(function (result) {
+                var text = JSON.stringify({
+                    "since": result.update_seq,
+                    //"include_docs": true,
+                    "style": 'all_docs',
+                    "conflicts" : true,
+                    "revs": true,
+                    "open_revs": 'all'
+                });
+                console.log("Starting sync with following options: "+text);
+                var encoded = new TextEncoder("ascii").encode(text);
+                s.send(encoded);
+            });
+        };
+        s.onclose = function () {
+            //reinit the socket if the page is still open
+            console.log("Attempt to close the socket");
+            initWebsocket(localDb, remoteDb, true);
+        };
+    };
 }]);

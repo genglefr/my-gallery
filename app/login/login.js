@@ -13,7 +13,7 @@ angular.module('myApp.login', ['ngRoute','toastr','pouchdb'])
     $scope.user.password = "";
     angular.element('.login').trigger('focus');
     //var db = new PouchDB(location.protocol+'//'+location.hostname+':5984/todos-moderated', {skip_setup: true});
-    var db = new PouchDB('http://localhost:5984/images', {skip_setup: true});
+    var db = new PouchDB('http://localhost:4984/images', {skip_setup: true});
     $scope.login = function (){
         db.login($scope.user.id, $scope.user.password, function (err, response) {
             if (!err) {
