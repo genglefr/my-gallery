@@ -7,19 +7,17 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
     controller: 'GalleryCtrl'
   });
 }]).controller('GalleryCtrl', ['$rootScope', '$scope', '$filter', 'toastr', 'pouchDB', 'FileUploader', function($rootScope, $scope, $filter, toastr, pouchDB, FileUploader) {
-
     var localDb = new PouchDB('images', {adapter : 'idb', auto_compaction: true});
     var remoteUrl = 'http://localhost:4984/images';
     var remoteDb = new PouchDB(remoteUrl);
-    var opts = {live: true, back_off_function: back_off};
+    var opts = {live: true, back_off_function: back_off, checkpoint: false};
 
     initWebsocket(localDb, remoteDb);
+    //localDb.replicate.from(remoteUrl, opts, syncError);
     localDb.replicate.to(remoteUrl, opts, syncError);
 
     var imageMap = {};
     localDb.changes({since: 0, live: true, include_docs: true, retry: true, style: 'all_docs'}).on('change', function (change) {
-        console.log("change");
-        console.log(change);
         if (!change.deleted) {
             createDeletableFlag(change);
             imageMap[change.doc._id] = change.doc;
@@ -129,6 +127,26 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
         }
     }
 
+    function checkpoint(change){
+        var checkpointCount = 2;
+        if ((change.seq % checkpointCount) == 0 && !window.checkpointing) {
+            window.checkpointing = true;
+            localDb.get("_local/checkpoint", {revs: true}).then(function (doc) {
+                doc.seq = change.seq;
+                doc.rev = change.changes[0].rev;
+                localDb.put(doc);
+            }).catch(function () {
+                localDb.put({
+                    _id: "_local/checkpoint",
+                    seq: change.seq,
+                    rev: change.changes[0].rev
+                });
+            }).finally(function(){
+                window.checkpointing = false;
+            });
+        }
+    }
+
     function initWebsocket(localDb, remoteDb, forceCreate) {
         if(!window.s || forceCreate)
             window.s = new WebSocket("ws://localhost:4984/images/_changes?feed=websocket");
@@ -136,16 +154,32 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             if (event.data) {
                 var changes = JSON.parse(event.data);
                 changes.forEach(function (change) {
-                    remoteDb.get(change.id,{rev: change.changes[0].rev, revs: true}).then(function (doc) {
-                        localDb.bulkDocs([doc], {new_edits: false});
+                    console.log(change);
+                    remoteDb.get(change.id,{rev: change.changes.length > 0 ? change.changes[0].rev : '', revs: true}).then(function (doc) {
+                        localDb.bulkDocs([doc], {new_edits: false}).then(function () {
+                            checkpoint(change)
+                        });
+                    }).catch(function(err){
+                        console.log("Error when replicating change '" + change.id + "'. Could be that doc was removed meanwhile. Error:" + JSON.stringify(err));
                     });
                 });
             }
         }
+        var getCheckpoint = new Promise(function(resolve, reject){
+            localDb.get("_local/checkpoint").then(function (doc) {
+                return resolve(doc.seq);
+            }).catch(function () {
+                localDb.info().then(function (result) {
+                    return resolve(result.update_seq);
+                }).catch(function(){
+                    return resolve(0);
+                });
+            });
+        })
         s.onopen = function (event) {
-            localDb.info().then(function (result) {
+            getCheckpoint.then(function(seq) {
                 var text = JSON.stringify({
-                    "since": result.update_seq,
+                    "since": seq,
                     "style": 'all_docs'
                 });
                 console.log("Starting sync with following options: " + text);
