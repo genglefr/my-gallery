@@ -18,6 +18,8 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
 
     var imageMap = {};
     localDb.changes({since: 0, live: true, include_docs: true, retry: true, style: 'all_docs'}).on('change', function (change) {
+        console.log("change");
+        console.log(change);
         if (!change.deleted) {
             createDeletableFlag(change);
             imageMap[change.doc._id] = change.doc;
@@ -134,7 +136,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             if (event.data) {
                 var changes = JSON.parse(event.data);
                 changes.forEach(function (change) {
-                    remoteDb.get(change.id,{rev: change.changes[0].rev}).then(function (doc) {
+                    remoteDb.get(change.id,{rev: change.changes[0].rev, revs: true}).then(function (doc) {
                         localDb.bulkDocs([doc], {new_edits: false});
                     });
                 });
@@ -144,11 +146,7 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             localDb.info().then(function (result) {
                 var text = JSON.stringify({
                     "since": result.update_seq,
-                    //"include_docs": true,
-                    "style": 'all_docs',
-                    "conflicts" : true,
-                    "revs": true,
-                    "open_revs": 'all'
+                    "style": 'all_docs'
                 });
                 console.log("Starting sync with following options: "+text);
                 var encoded = new TextEncoder("ascii").encode(text);
