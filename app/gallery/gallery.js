@@ -148,14 +148,14 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
                     "since": result.update_seq,
                     "style": 'all_docs'
                 });
-                console.log("Starting sync with following options: "+text);
+                console.log("Starting sync with following options: " + text);
                 var encoded = new TextEncoder("ascii").encode(text);
                 s.send(encoded);
             });
         };
         s.onclose = function () {
             //reinit the socket if the page is still open
-            console.log("Attempt to close the socket");
+            console.log("Attempt to close the websocket");
             initWebsocket(localDb, remoteDb, true);
         };
     };
