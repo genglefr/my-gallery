@@ -133,12 +133,14 @@ angular.module('myApp.gallery', ['ngRoute','toastr','pouchdb','thatisuday.ng-ima
             window.checkpointing = true;
             localDb.get("_local/checkpoint", {revs: true}).then(function (doc) {
                 doc.seq = change.seq;
+                doc.docId = change.id;
                 doc.rev = change.changes[0].rev;
                 localDb.put(doc);
             }).catch(function () {
                 localDb.put({
                     _id: "_local/checkpoint",
                     seq: change.seq,
+                    docId: change.id,
                     rev: change.changes[0].rev
                 });
             }).finally(function(){
