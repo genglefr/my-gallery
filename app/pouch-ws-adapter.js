@@ -19,18 +19,29 @@
         this.checkpointDocId = "_local/checkpoint-" + this.localDb.name;
         this._initWebsocket();
         this.socket.onmessage = function (event) {
+            console.log("event:");
+            console.log(event);
             if (event.data) {
                 var changes = JSON.parse(event.data);
+                var lastSeq;
                 changes.forEach(function (change) {
+                    console.log("emit('change', change)");
                     //console.log(change);
                     self.remoteDb.get(change.id,{rev: change.changes.length > 0 ? change.changes[0].rev : '', revs: true}).then(function (doc) {
                         //console.log(doc);
                         self.localDb.bulkDocs([doc], {new_edits: false}).then(function () {
-                            self._checkpoint(change)
+                            self._checkpoint(change);
                         });
                     }).catch(function(err){
                         console.log("Error when replicating change '" + change.id + "'. Could be that doc was removed meanwhile. Error:" + JSON.stringify(err));
+                        console.log("emit('error', err)");
                     });
+                    lastSeq = change.seq;
+                });
+                self.remoteDb.info().then(function (result) {
+                    if (lastSeq >= result.update_seq) {
+                        console.log("emit('complete', result)");
+                    }
                 });
             }
         }
