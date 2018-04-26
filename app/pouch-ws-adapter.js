@@ -3,6 +3,7 @@
         typeof define === 'function' && define.amd ? define(factory) :
             (global.PouchWsAdapter = factory());
 }(this, (function () {'use strict';
+
     function PouchWsAdapter(localDb, remoteDb, options) {
         var self = this;
         if (!localDb || !remoteDb) {
