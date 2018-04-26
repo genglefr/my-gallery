@@ -15,6 +15,7 @@
         this.keepAlive = opts.keepAlive || false;
         this.queryParams = opts.queryParams || '';
         this.checkpointCount = opts.checkpointCount || 2;
+        this.checkpointDocId = "_local/checkpoint-" + this.localDb.name;
         this._initWebsocket();
         this.socket.onmessage = function (event) {
             if (event.data) {
@@ -33,7 +34,7 @@
             }
         }
         this.getCheckpoint = new Promise(function(resolve, reject){
-            self.localDb.get("_local/checkpoint").then(function (doc) {
+            self.localDb.get(self.checkpointDocId).then(function (doc) {
                 return resolve(doc.seq);
             }).catch(function () {
                 self.localDb.info().then(function (result) {
@@ -79,14 +80,14 @@
         var self = this;
         if ((change.seq % this.checkpointCount) == 0 && !self.checkpointing) {
             self.checkpointing = true;
-            self.localDb.get("_local/checkpoint", {revs: true}).then(function (doc) {
+            self.localDb.get(self.checkpointDocId, {revs: true}).then(function (doc) {
                 doc.seq = change.seq;
                 doc.docId = change.id;
                 doc.rev = change.changes[0].rev;
                 self.localDb.put(doc);
             }).catch(function () {
                 self.localDb.put({
-                    _id: "_local/checkpoint",
+                    _id: self.checkpointDocId,
                     seq: change.seq,
                     docId: change.id,
                     rev: change.changes[0].rev
